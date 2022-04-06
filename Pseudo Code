@@ -1,0 +1,39 @@
+Alright so this is the gist of what I've thought of it
+Storyline: Follows the story of a prince called boji. Boji is a weakling with essentially no physical strength.  He's also deaf, so he cannot talk audibly. He can still understand people by reading lips. He has two things going for him: a really good heart, and the ability to stun/incapacitate people by going for their pressure point.
+
+Boji is next in line to be king. However, a lot of people don't think he should be king because he's so weak, and because he's deaf. The current king dies, and as Boji is slotted to become the next king, an invasion happens. Boji manages to runaway, but his kingdom is occupied by invaders.
+The game follows his desire to retake his kingdom
+He has 2 companions: a baby dragon named Skaarf, and a royal guard named Lance.
+Image
+This is boji
+Skaarf
+Image
+Lance
+Image
+Okay, as for the game specifications: 
+
+We'll be working on implementing the following functionality:
+
+1) Being able to traverse the map
+2) Deciding between a procedurally generated map or a pre-designed map
+3) Attacking enemies in the map
+4) Picking up treasure that will give us power boosts / regain health 
+5) Combat screen where boji, skaarf, and lance can collectively battle 
+6) Quickly tell the player the story through printing dialogue to the screen
+7)  Beat game by retaking kingdom
+The hero class will look something like (obviously not exhaustive)
+
+class Actor {
+protected: 
+int health;
+int speed;
+int strength; 
+public:
+void attack( villain, damage)
+void talk() 
+}
+
+the villain and hero class will inherit from this (i.e. class Hero : public Actor) and override functions (add pickuptreasure function to hero, give villain different attacks).
+I'll be implementing some of my stuff too - let me know if there's anything here'd you'd like to change
+It's your project too so don't think you just need to go with whatever this is
+also, I might swap out Lance for a different character that can provide comedy relief and random dialogue lines like mimir from god of war.
