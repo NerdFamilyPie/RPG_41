@@ -1,9 +1,10 @@
 //Put your name(s) here:
 //What bullet points did you do:
 //Delete this next line to let the code compile
-#error Delete This!
+//#error Delete This!
 #include "map.h"
 #include <unistd.h>
+#include "actor.cc"
 
 const int MAX_FPS = 90; //Cap frame rate 
 const unsigned int TIMEOUT = 10; //Milliseconds to wait for a getch to finish
