@@ -1,6 +1,3 @@
-//Put your name(s) here:
-//What bullet points did you do:
-//Delete this next line to let the code compile
 #include "map.h"
 #include "actor.h"
 #include "Bridges.h"
@@ -95,8 +92,15 @@ int main() {
 
 		if(map.collision(x,y)){
 			//add in protection against std::out of range
-			y++;
-			x--;
+			if(x < 10){
+				x++;
+			}
+			if(y > 40){
+				y--;
+			} else{
+				x--;
+				y++;
+			}
 		}
 		//Stop flickering by only redrawing on a change
 		if (x != old_x or y != old_y) {
@@ -124,13 +128,16 @@ int main() {
 			cin.ignore();
 
 			int i = 0;
-			while(i<10){
+			while((m1.get_status())){
 			for(const shared_ptr<Actor> &a : vec){
 				if(a->id() == "Monster"){
 					for(const shared_ptr<Actor> &b : vec){
 						if(b->id() == "Hero"){
 							dynamic_pointer_cast<Monster>(a)->attack(dynamic_pointer_cast<Hero>(b),10);
-							i++;
+							if(b->health <=  0){
+								m1.set_status(false);
+								break;
+							}	
 						}
 					}
 				}
@@ -138,7 +145,10 @@ int main() {
 					for(const shared_ptr<Actor> &b : vec){
 						if(b->id() == "Monster"){
 							dynamic_pointer_cast<Hero>(a)->attack(dynamic_pointer_cast<Monster>(b),50);
-							i++;
+							if(b->health <= 0){
+								m1.set_status(false);
+								break;
+							}
 						}
 					}	
 				}
@@ -207,4 +217,3 @@ int main() {
 	bridges->visualize();
 	
 }
-

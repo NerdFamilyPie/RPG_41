@@ -4,6 +4,7 @@
 #include <iostream>
 #include <random>
 #include <ncurses.h>
+#include <fstream>
 using namespace std; //Boo hiss
 
 class Map {
@@ -59,11 +60,46 @@ class Map {
 			
 	}
 
+//oid saveMap(string filename){
+//ofstream ins(filename);
+//
+//if(!ins){
+///cout << "Bad file, cannot be opened." << endl;
+//	return;
+//}
+//for(size_t i = 0; i < map.size(); i++){
+//	for(size_t j = 0; j < map.size(); j++){
+//		ins << map.at(i).at(j);
+//	}
+//	ins << endl;
+//}
+//
+//
 
-//	void collision(int x, int y){
-//		if(map.at(x).at(y) == WALL){
+//oid loadmap(string filename){
+//ifstream ins(filename);
+
+//if(!lns){
+//	cout << "Bad file" << endl;
+//	return;
+//}
+//
+//string line;
+//while(getline(ins, line)){
+//	map.push_back(line);
+//}
+//
+//for(size_t i = 0; i < map.size(); i++){
+//	for(size_t j = 0; j < map.at(0).size(); j++){
+//		if(map.at(i).at(j) == "$"){
+//			cout << "$ found" << endl;
+//			break;
 //		}
 //	}
+//}
+//
+
+
 	bool collision(int x, int y){
 		if(map.at(y).at(x) == WALL){
 			return true;
@@ -94,6 +130,9 @@ class Map {
 
 
 	void initialize_map() {
+
+	ofstream ins("test.txt");
+	
 	map.clear();
 	map.resize(SIZE);
 	for(auto &v : map ) v.resize(SIZE, ' ');
@@ -104,16 +143,22 @@ class Map {
 		}
 		else if (i == SIZE/2 and j == SIZE/2){
 			map.at(i).at(j) = HERO;
-		} else if (i == 5){
+		} else if (i == 5 && j%2!=0){
+			map.at(i).at(j) = WALL;
+		}
+		else if(i%9==0 && j%12==1){
 			map.at(i).at(j) = MONSTER;
 		}
-
-		else if (i == 10){
-			map.at(i).at(j) = TREASURE;
-		}
+		map.at(10).at(36) = TREASURE;
+		map.at(20).at(24) = TREASURE;
+		
+		ins << map.at(i).at(j);
 
 	}
+	ins << endl;
+
 }
+
 }
 
 	//Draw the DISPLAY tiles around coordinate (x,y)

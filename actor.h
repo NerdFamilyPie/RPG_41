@@ -19,20 +19,34 @@ struct Actor{
 	friend ostream& operator<< (ostream &outs, const Actor &rhs){
 		return outs << rhs.name;
 	}
-	void damage(Actor &actor, int damage){
+	virtual void damage(Actor &actor, int damage){
 		actor.set_hp(actor.get_hp() - damage);
 		cout << name << " has damaged " << actor << " " << damage << " damage. " << actor.get_hp() << " remaining hp." << endl;
 	}
-	void attack( const shared_ptr<Actor> &a, int damage){
+ 	virtual	void attack( const shared_ptr<Actor> &a, int damage){
 		a->health =  a->health - damage;
 		cout << name << " has damaged " << a->name << " " << damage << " damage. " << a->name << " has " << a->health << " remaining hp." << endl;
-		if(a->health <= 0) {
+		if(a->health < 0) {
 			cout << a->name << " has died. " << endl;
 			a->status = false;
+			a->health = 0;
+			return;
 		}
 	}
-	bool getStatus(const shared_ptr<Actor> &a){
-		return a->status;
+	void set_status(bool new_status){
+		status = new_status;
+	}
+	
+	bool get_status(){
+		return status;
+	}
+
+	bool isAlive(){
+		cout << name << " has " << health << "hp." << endl;
+		if(health < 0){
+			return false;
+		} 
+		return true;
 	}
 
 	void set_hp(int new_health){
@@ -42,13 +56,6 @@ struct Actor{
 		return health;
 	}
 	virtual string id() const {return "Actor"; }
-
-	int get_speed(){
-		return speed;
-	}
-	string GetName(){
-		return name;
-	}
 };
 	struct Hero : Actor {
 		Hero(int new_health, int new_speed, string new_name) : Actor(new_health, new_speed, new_name) {}
@@ -57,6 +64,15 @@ struct Actor{
 
 	struct Monster : Actor{
 		Monster(int new_health, int new_speed, string new_name) : Actor(new_health, new_speed, new_name) {}
+		void attack( const shared_ptr<Actor> &a, int damage) override {
+        a->health =  a->health - damage;
+        cout << name << " has damaged " << a->name << " " << damage << " damage. " << a->name << " has " << a->health << " remaining hp." << endl;
+        if(a->health < 0) {
+            cout << a->name << " has died. " << endl;
+            a->status = false;
+        }
+    }
+
 		string id () const override {return "Monster";}
 	};
 
@@ -64,5 +80,7 @@ struct Actor{
 	bool my_sort(const shared_ptr<Actor>&a, const shared_ptr<Actor>&b){
 		return a->speed > b->speed;
 	}
+
+	
 
 
