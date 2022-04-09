@@ -3,7 +3,13 @@
 //Delete this next line to let the code compile
 #include "map.h"
 #include "actor.h"
+#include "Bridges.h"
+#include "CircDLelement.h"
 #include <unistd.h>
+
+using namespace bridges;
+
+
 
 const int MAX_FPS = 90; //Cap frame rate 
 const unsigned int TIMEOUT = 10; //Milliseconds to wait for a getch to finish
@@ -37,6 +43,10 @@ void turn_off_ncurses() {
 
 
 int main() {
+
+	Bridges *bridges =  new Bridges(42, "Nerdpie_Cromwell",
+                                "795489986107");
+
 	Hero Boji = {100, 150, "Boji"};
 	Hero Skaarf = {100, 90, "Skaarf"};
 	Hero Lance = {100, 50, "Lance"};
@@ -52,6 +62,7 @@ int main() {
 	cin.ignore();
 	cout << "Despite having no physical strength, Boji can incapacitate his enemies by taking advantage of their anataomy. Using a deliberate combination of speed and precision, his fighting style focuses on his oppponents pressure points. " << endl;
 	cin.ignore();
+
 	turn_on_ncurses();
 	Map map;
 	int x = Map::SIZE / 2, y = Map::SIZE / 2; //Start in middle of the world
@@ -78,6 +89,9 @@ int main() {
 		else if (ch == ERR) { //No keystroke
 			; //Do nothing
 		}
+		else if (ch == 'e') {
+			break;
+		}
 
 		if(map.collision(x,y)){
 			//add in protection against std::out of range
@@ -92,6 +106,7 @@ int main() {
 				Monster m1 = {100, 70, "Goblin"}; 
 				Monster m2 = {100, 50, "Zombie"};
 				Monster m3 = {100, 1000, "Demon"};
+
 				vec.push_back(make_shared<Monster>(m1));
 			    vec.push_back(make_shared<Monster>(m2));
 				vec.push_back(make_shared<Monster>(m3));
@@ -100,47 +115,37 @@ int main() {
 				//keep fighting until either boji is dead or all the monsters are dead
 				//all the monsters are dead if every monster is below 0hp
 				
+			
 			cout << "This is the order in which you will fight: " << endl;
 			for(const auto &a: vec){
 				cout << a->name << endl;
 			}
 
 			cin.ignore();
+
 			int i = 0;
-			bool flag = 0;
-			while(true){
+			while(i<10){
 			for(const shared_ptr<Actor> &a : vec){
 				if(a->id() == "Monster"){
 					for(const shared_ptr<Actor> &b : vec){
-						if(b->id() == "Hero" && b->status == true) {
+						if(b->id() == "Hero"){
 							dynamic_pointer_cast<Monster>(a)->attack(dynamic_pointer_cast<Hero>(b),10);
-							b->health = b->health - 10;
-							if(b->health<=0){
-								b->status = false;
-							}
-							if(b->name == "Boji" && b->health <=0){
-								cout << " Boji died! " << endl;
-								break;
-							}
-	
+							i++;
 						}
 					}
 				}
-
 				if(a->id() == "Hero"){
 					for(const shared_ptr<Actor> &b : vec){
-						if(b->id() == "Monster" && b->status == true){
+						if(b->id() == "Monster"){
 							dynamic_pointer_cast<Hero>(a)->attack(dynamic_pointer_cast<Monster>(b),50);
-							b->health = b->health - 50;
-							if(b->health <=0){
-								b->status = false;
-							}
+							i++;
 						}
 					}	
 				}
 			}
 		}
 
+				cout << "Wow, you killed all of them!" << endl;
 				cin.ignore();
 
 			
@@ -159,5 +164,47 @@ int main() {
 		usleep(1'000'000/MAX_FPS);
 	}
 	turn_off_ncurses();
+
+	CircDLelement<shared_ptr<Actor>> *base = new CircDLelement<shared_ptr<Actor>>(
+			vec.at(0),
+			""
+			);
+	CircDLelement<shared_ptr<Actor>> *current = base;
+	
+	
+	for (int i = 1; i < vec.size(); i++){
+		CircDLelement<shared_ptr<Actor>> *temp = new CircDLelement<shared_ptr<Actor>>(
+				vec.at(i),
+				""
+				);
+		current->setNext(temp);
+		temp->setPrev(current);
+		current = temp;
+	}
+	current->setNext(base);
+	base->setPrev(current);
+	
+	current = base;
+	shared_ptr<Actor> si = make_shared<Actor> (0,0,"NEW");
+	
+	do {
+		si = current->getValue();
+		current->setLabel(si->name);
+		current->getVisualizer()->setColor("BLUE");
+
+		current->getLinkVisualizer(current->getNext())->setColor("GREEN");
+		current->getLinkVisualizer(current->getNext())->setThickness(si->speed*.01);
+
+		current->getLinkVisualizer(current->getPrev())->setColor("RED");
+		current->getLinkVisualizer(current->getPrev())->setThickness(si->health*.01);
+
+		current = current->getNext();
+	}  while (current != base);
+
+	// set data structure to point to head
+	bridges->setDataStructure(base);
+	// visualize the circular list
+	bridges->visualize();
+	
 }
 

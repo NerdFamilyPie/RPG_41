@@ -6,101 +6,77 @@
 #include "Bridges.h"
 #include "CircDLelement.h"
 #include "StudentInfo.h"
+#include "actor.cc"
 
 
 using namespace bridges;
 
 // helper function
-CircDLelement<StudentInfo> *insertFront(
-	CircDLelement<StudentInfo> *tailElement,
-	CircDLelement<StudentInfo> *newElement);
+CircDLelement<Actors> *insertFront(
+	CircDLelement<Actors> *tailElement,
+	CircDLelement<Actors> *newElement);
 
 int main(int argc, char **argv) {
-    Bridges *bridges =  new Bridges(999, "YOUR_USER_ID",
-                                "YOUR_API_KEY");
+    Bridges *bridges =  new Bridges(314, "Nerdpie_Cromwell",
+                                "795489986107");
 
 
 
-	bridges->setTitle("An Example Circular Doubly Linked List");
+	bridges->setTitle("Epic Player's R' US");
 
 	// create the linked list elements with
 	// student data
-	CircDLelement<StudentInfo> *students[] = {
-		new CircDLelement<StudentInfo>(
-			StudentInfo(
-				"00000000000",
-				"Gretel Chaney",
-				"CS",
-				"g.chaney@generated.com",
-				"magenta",
-				"blue",
-				9.0
-			), ""),
-		new CircDLelement<StudentInfo>(
-			StudentInfo(
-				"00000000001",
-				"Karol Soderman",
-				"SIS",
-				"k.soderman@generated.com",
-				"magenta",
-				"red",
-				11.0
-			), ""),
-		new CircDLelement<StudentInfo>(
-			StudentInfo(
-				"00000000002",
-				"Lamont Kyler",
-				"BIO",
-				"l.kyler@generated.com",
-				"yellow",
-				"green",
-				12.0
-			), ""),
-		new CircDLelement<StudentInfo>(
-			StudentInfo(
-				"00000000003",
-				"Gladys Serino",
-				"CS",
-				"g.serino@generated.com",
-				"blue",
-				"magenta",
-				9.0
-			), ""),
-		new CircDLelement<StudentInfo>(
-			StudentInfo(
-				"00000000004",
-				"Starr Mcginn",
-				"CS",
-				"s.mcginn@generated.com",
-				"red",
-				"yellow",
-				15.0
-			), "")
+	CircDLelement<Actors> *peeps[] = {
+		new CircDLelement<Actors>(
+				Actors(
+					10,
+					5,
+					10,
+					"Hero",
+					"Peggy"
+					),""),
+		new CircDLelement<Actors>(
+				Actors(
+					5,
+					10,
+					5,
+					"Villian",
+					"Deku"
+					),""),
+		new CircDLelement<Actors> (
+				Actors(
+					2,
+					2,
+					2,
+					"Hero",
+					"Lennox"
+					),"")
+	
 	};
 
-	CircDLelement<StudentInfo> *head =  nullptr;
+	CircDLelement<Actors> *head =  nullptr;
 
-	int num_students = 5;
+	int num_students = 3;
 	for (int i = 0; i < num_students; i++) {
 		if (i)
-			head = insertFront(head, students[i]);
+			head = insertFront(head, peeps[i]);
 		else
-			head = students[i];
+			head = peeps[i];
 	}
 
 	//  add visual attributes
-	CircDLelement<StudentInfo> *current = head;
-	StudentInfo si;
+	CircDLelement<Actors> *current = head;
+	Actors si;
 	do {
 		si = current->getValue();
-		current->setLabel(si.getStudentLabel());
-		current->getVisualizer()->setColor(si.getFavoriteColor());
+		current->setLabel(si.GetName());
+		current->getVisualizer()->setColor("blue");
 
-		current->getLinkVisualizer(current->getNext())->setColor(si.getDislikeColor());
-		current->getLinkVisualizer(current->getNext())->setThickness(si.getStudentCreditHours()*.5);
+		current->getLinkVisualizer(current->getNext())->setColor("green");
+		current->getLinkVisualizer(current->getNext())->setThickness(si.GetSpeed());
 
-		current->getLinkVisualizer(current->getPrev())->setColor(si.getDislikeColor());
-		current->getLinkVisualizer(current->getPrev())->setThickness(si.getStudentCreditHours()*.5);
+		current->getLinkVisualizer(current->getPrev())->setColor("red");
+		current->getLinkVisualizer(current->getPrev())->setThickness(si.GetHealth());
 
 		current = current->getNext();
 	}  while (current != head);
@@ -113,11 +89,11 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-CircDLelement<StudentInfo> *insertFront(
-	CircDLelement<StudentInfo> *tailElement,
-	CircDLelement<StudentInfo> *newElement) {
+CircDLelement<Actors> *insertFront(
+	CircDLelement<Actors> *tailElement,
+	CircDLelement<Actors> *newElement) {
 
-	CircDLelement<StudentInfo> *tailNextElement = tailElement->getNext();
+	CircDLelement<Actors> *tailNextElement = tailElement->getNext();
 
 	newElement->setNext(tailNextElement);
 	newElement->setPrev(tailElement);
