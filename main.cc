@@ -100,37 +100,47 @@ int main() {
 				//keep fighting until either boji is dead or all the monsters are dead
 				//all the monsters are dead if every monster is below 0hp
 				
-			
 			cout << "This is the order in which you will fight: " << endl;
 			for(const auto &a: vec){
 				cout << a->name << endl;
 			}
 
 			cin.ignore();
-
 			int i = 0;
-			while(i<10){
+			bool flag = 0;
+			while(true){
 			for(const shared_ptr<Actor> &a : vec){
 				if(a->id() == "Monster"){
 					for(const shared_ptr<Actor> &b : vec){
-						if(b->id() == "Hero"){
+						if(b->id() == "Hero" && b->status == true) {
 							dynamic_pointer_cast<Monster>(a)->attack(dynamic_pointer_cast<Hero>(b),10);
-							i++;
+							b->health = b->health - 10;
+							if(b->health<=0){
+								b->status = false;
+							}
+							if(b->name == "Boji" && b->health <=0){
+								cout << " Boji died! " << endl;
+								break;
+							}
+	
 						}
 					}
 				}
+
 				if(a->id() == "Hero"){
 					for(const shared_ptr<Actor> &b : vec){
-						if(b->id() == "Monster"){
+						if(b->id() == "Monster" && b->status == true){
 							dynamic_pointer_cast<Hero>(a)->attack(dynamic_pointer_cast<Monster>(b),50);
-							i++;
+							b->health = b->health - 50;
+							if(b->health <=0){
+								b->status = false;
+							}
 						}
 					}	
 				}
 			}
 		}
 
-				cout << "Wow, you killed all of them!" << endl;
 				cin.ignore();
 
 			

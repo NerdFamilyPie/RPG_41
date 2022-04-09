@@ -31,8 +31,8 @@ struct Actor{
 			a->status = false;
 		}
 	}
-	bool getStatus(const shared_ptr<Actor> &a){
-		return a->status;
+	bool isAlive(){
+		return status;
 	}
 
 	void set_hp(int new_health){

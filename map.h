@@ -104,13 +104,16 @@ class Map {
 		}
 		else if (i == SIZE/2 and j == SIZE/2){
 			map.at(i).at(j) = HERO;
-		} else if (i == 5){
+		} else if (i == 5 && j%2!=0){
+			map.at(i).at(j) = WALL;
+		}
+		else if(i%3==0 && j%5==1){
 			map.at(i).at(j) = MONSTER;
 		}
+		map.at(10).at(36) = TREASURE;
+		map.at(20).at(24) = TREASURE;
+		
 
-		else if (i == 10){
-			map.at(i).at(j) = TREASURE;
-		}
 
 	}
 }
