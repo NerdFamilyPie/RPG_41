@@ -52,7 +52,6 @@ int main() {
 	cin.ignore();
 	cout << "Despite having no physical strength, Boji can incapacitate his enemies by taking advantage of their anataomy. Using a deliberate combination of speed and precision, his fighting style focuses on his oppponents pressure points. " << endl;
 	cin.ignore();
-		
 	turn_on_ncurses();
 	Map map;
 	int x = Map::SIZE / 2, y = Map::SIZE / 2; //Start in middle of the world
@@ -100,16 +99,36 @@ int main() {
 
 				//keep fighting until either boji is dead or all the monsters are dead
 				//all the monsters are dead if every monster is below 0hp
+				
 			
-				while( m1.isAlive()  || m2.isAlive() || m3.isAlive()){
-					for(const shared_ptr<Actor> a : vec){
-						if(a->id() == "Monster"){
-							cout << a << endl;
+			cout << "This is the order in which you will fight: " << endl;
+			for(const auto &a: vec){
+				cout << a->name << endl;
+			}
+
+			cin.ignore();
+
+			int i = 0;
+			while(i<10){
+			for(const shared_ptr<Actor> &a : vec){
+				if(a->id() == "Monster"){
+					for(const shared_ptr<Actor> &b : vec){
+						if(b->id() == "Hero"){
+							dynamic_pointer_cast<Monster>(a)->attack(dynamic_pointer_cast<Hero>(b),10);
+							i++;
 						}
 					}
-
-
 				}
+				if(a->id() == "Hero"){
+					for(const shared_ptr<Actor> &b : vec){
+						if(b->id() == "Monster"){
+							dynamic_pointer_cast<Hero>(a)->attack(dynamic_pointer_cast<Monster>(b),50);
+							i++;
+						}
+					}	
+				}
+			}
+		}
 
 				cout << "Wow, you killed all of them!" << endl;
 				cin.ignore();
