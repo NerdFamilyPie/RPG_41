@@ -31,8 +31,8 @@ struct Actor{
 			a->status = false;
 		}
 	}
-	bool isAlive(){
-		return status;
+	bool getStatus(const shared_ptr<Actor> &a){
+		return a->status;
 	}
 
 	void set_hp(int new_health){
@@ -42,6 +42,13 @@ struct Actor{
 		return health;
 	}
 	virtual string id() const {return "Actor"; }
+
+	int get_speed(){
+		return speed;
+	}
+	string GetName(){
+		return name;
+	}
 };
 	struct Hero : Actor {
 		Hero(int new_health, int new_speed, string new_name) : Actor(new_health, new_speed, new_name) {}
@@ -57,7 +64,5 @@ struct Actor{
 	bool my_sort(const shared_ptr<Actor>&a, const shared_ptr<Actor>&b){
 		return a->speed > b->speed;
 	}
-
-	
 
 
